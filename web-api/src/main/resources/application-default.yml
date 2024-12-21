@@ -1,0 +1,14 @@
+env:
+  aws:
+    region: ap-northeast-1
+    access-key-id: dummy
+    secret-access-key: dummy
+    endpoint: http://localhost:4566
+    ses:
+      mock-level: localstack
+    ses-v2:
+      mock-level: ses-v2-local
+      endpoint: http://localhost:8005
+    sqs:
+      mock-level: localstack
+      test-queue-url: http://sqs.ap-northeast-1.localhost.localstack.cloud:4566/000000000000/test-queue.fifo

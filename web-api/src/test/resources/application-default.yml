@@ -1,0 +1,8 @@
+env:
+  aws:
+    ses:
+      mock-level: mock
+    ses-v2:
+      mock-level: mock
+    sqs:
+      mock-level: mock

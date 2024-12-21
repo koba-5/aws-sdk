@@ -6,7 +6,7 @@ plugins {
 	id("com.diffplug.spotless") version "7.0.0.BETA4"
 }
 
-group = "internal"
+group = "web-api"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -24,6 +24,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	// AWS
+	implementation("software.amazon.awssdk:sesv2:2.29.23")
+	implementation("software.amazon.awssdk:ses:2.29.23")
+	implementation("software.amazon.awssdk:sqs:2.29.23")
 
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -48,5 +53,5 @@ spotless {
 }
 
 tasks.compileKotlin{
-	dependsOn("spotlessApply")
+	dependsOn(tasks.spotlessApply)
 }
