@@ -6,7 +6,7 @@ plugins {
 	id("com.diffplug.spotless") version "7.0.0.BETA4"
 }
 
-group = "internal"
+group = "message-api"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -19,11 +19,20 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement{
+	imports{
+		mavenBom("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.3")
+	}
+}
+
 dependencies {
 	// Kotlin × Spring boot
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	// AWS
+	implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
 
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -48,5 +57,5 @@ spotless {
 }
 
 tasks.compileKotlin{
-	dependsOn("spotlessApply")
+	dependsOn(tasks.spotlessApply)
 }
