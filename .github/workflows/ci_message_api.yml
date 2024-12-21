@@ -5,30 +5,28 @@ on:
   push:
     branches:
       - feature-**
-    path:
-      - web-api
+      - develop
+    paths:
+      - message-api
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     defaults:
       run:
-        working-directory: web-api
-
+        working-directory: message-api
     steps:
       - name: checkout
         uses: actions/checkout@v3
-
       - uses: actions/setup-java@v4
         with:
           distribution: "corretto"
           java-version: "21"
-
-      - name: Preparation for test
+      - name: Preparation for tests
         run: |
           java --version
           chmod +x ./gradlew
-
       - name: test
+        env:
+          SPRING_PROFILES_ACTIVE: ci
         run: ./gradlew test

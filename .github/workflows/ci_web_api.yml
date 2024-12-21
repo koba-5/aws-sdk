@@ -5,30 +5,51 @@ on:
   push:
     branches:
       - feature-**
-    path:
+      - develop
+    paths:
       - web-api
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: web-api
-
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: Set up LocalStack
+        run: |
+          docker compose up localstack -d
+      - name: Set up ses-v2-local
+        run: |
+          docker compose up ses-v2-local -d
+      - name: Set up awscli-local
+        run: |
+          pip install localstack awscli-local
+          pip install localstack awscli
+      - name: Set up SQS
+        working-directory: tools/localstack
+        run: |
+          chmod +x ./sqs-init.sh
+          ./sqs-init.sh
+      - name: Set up SES
+        working-directory: tools/localstack
+        run: |
+          chmod +x ./ses-init.sh
+          ./ses-init.sh
 
       - uses: actions/setup-java@v4
         with:
           distribution: "corretto"
           java-version: "21"
-
-      - name: Preparation for test
+      - name: Preparation for tests
         run: |
           java --version
           chmod +x ./gradlew
-
+      - name: SpotlessCheck
+        run: ./gradlew spotlessCheck
       - name: test
+        env:
+          SPRING_PROFILES_ACTIVE: ci
         run: ./gradlew test
